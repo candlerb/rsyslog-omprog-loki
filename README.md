@@ -32,7 +32,7 @@ template(name="loki" type="list") {
   constant(value="\n")
 }
 
-action(type="omprog"
+local0.*  action(type="omprog"
   template="loki"
   binary="/usr/local/sbin/omprog-loki.py"
   action.resumeInterval="5"
