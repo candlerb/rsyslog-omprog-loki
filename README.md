@@ -39,11 +39,17 @@ action(type="omprog"
   confirmMessages="on"
   useTransactions="on"
   output="/tmp/loki.err"
-  #reportFailures="on"    # only in 8.38.0+
+  #queue.type="LinkedList"
+  #queue.minDequeueBatchSize="50"   # only in 8.1901.0+
+  #reportFailures="on"              # only in 8.38.0+
   forceSingleInstance="on")
 ```
 
-FIXME: with this config, rsyslog is sending one message per transaction
+Under light load, rsyslog will send one message per transaction, causing a
+separate HTTP POST to loki.  To delay messages for batching you will need
+rsyslog v8.1901.0 or later with the
+[queue.minDequeueBatchSize](https://www.rsyslog.com/doc/master/rainerscript/queue_parameters.html#queue-mindequeuebatchsize)
+[feature](https://github.com/rsyslog/rsyslog/issues/495).
 
 ## Caveats
 
