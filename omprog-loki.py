@@ -17,6 +17,7 @@ import functools
 import re
 import requests
 import sys
+import time
 
 # Include the trailing \n in these
 BEGIN_TRANSACTION_MARK = "BEGIN TRANSACTION\n"
@@ -71,6 +72,13 @@ for line in sys.stdin:
             print("OK")
         continue
     if line == COMMIT_TRANSACTION_MARK:
+        #####################
+        ## This can force batching under light load for
+        ## old rsyslog without queue.minDequeueBatchSize
+        ## (but risks losing messages under high load)
+        #if len(events) < 5:
+        #    time.sleep(0.5)
+        #####################
         in_transaction = False
         res = flush(events)
         if CONFIRM_MESSAGES:
